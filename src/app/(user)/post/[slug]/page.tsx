@@ -3,6 +3,8 @@ import { client } from '@/lib/sanity.client';
 import { urlFor } from '@/lib/urlFor';
 import { groq } from 'next-sanity';
 import Image from 'next/image';
+import { PortableText } from '@portabletext/react';
+import { RichTextComponents } from '@/components/RichTextComponents';
 
 type Props = {
   params: {
@@ -21,6 +23,8 @@ async function Post({ params: { slug } }: Props) {
   `;
 
   const post: Posts = await client.fetch(query, { slug });
+
+  console.log(post.body)
   return (
     <article className="px-10 pb-28">
       <section className="space-y-2 border border-[#F7AB0A] text-white">
@@ -64,7 +68,7 @@ async function Post({ params: { slug } }: Props) {
 
             <div>
               <h2 className="italic pt-10">{post.description}</h2>
-              <div className='flex items-center justify-end mt-auto space-x-2'>
+              <div className="flex items-center justify-end mt-auto space-x-2">
                 {post.categories.map((category) => (
                   <p
                     key={category._id}
@@ -78,6 +82,8 @@ async function Post({ params: { slug } }: Props) {
           </section>
         </div>
       </section>
+
+      <PortableText  value={post.body} components={RichTextComponents} />
     </article>
   );
 }
