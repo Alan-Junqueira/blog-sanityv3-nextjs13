@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^2.0.1",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "@types/lodash": "^4.14.191",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
