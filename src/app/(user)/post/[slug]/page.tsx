@@ -12,6 +12,23 @@ type Props = {
   };
 };
 
+export const revalidate = 60; // revalidate this page every 60 seconds
+
+export async function generateStaticParams() {
+  const query = groq`
+    *[_type=='post']{
+      slug
+    }
+  `;
+
+  const slugs: Posts[] = await client.fetch(query);
+  const slugRoutes = slugs.map((slug) => slug.slug.current);
+
+  return slugRoutes.map((slug) => ({
+    slug
+  }));
+}
+
 async function Post({ params: { slug } }: Props) {
   const query = groq`
     *[_type=='post' && slug.current == $slug] [0]
@@ -24,7 +41,7 @@ async function Post({ params: { slug } }: Props) {
 
   const post: Posts = await client.fetch(query, { slug });
 
-  console.log(post.body)
+  console.log(post.body);
   return (
     <article className="px-10 pb-28">
       <section className="space-y-2 border border-[#F7AB0A] text-white">
@@ -83,7 +100,7 @@ async function Post({ params: { slug } }: Props) {
         </div>
       </section>
 
-      <PortableText  value={post.body} components={RichTextComponents} />
+      <PortableText value={post.body} components={RichTextComponents} />
     </article>
   );
 }
